@@ -26,14 +26,11 @@
  * First it is checked if automatic login is possible with this method.
  * If so it is tried via the performAutoLogin function.
  * When a user provides credentials the authenticate function is called.
- *
- * @author sl
- * @author Kevin Papst
  */
 abstract class Kimai_Auth_Abstract
 {
     /**
-     * @var array
+     * @var Kimai_Config
      */
     protected $kga = null;
 
@@ -44,7 +41,7 @@ abstract class Kimai_Auth_Abstract
 
     /**
      * @param Kimai_Database_Mysql $database
-     * @param array $kga
+     * @param Kimai_Config $kga
      */
     public function __construct($database = null, $kga = null)
     {
@@ -55,18 +52,39 @@ abstract class Kimai_Auth_Abstract
         if ($kga !== null) {
             $this->setKga($kga);
         }
+        if (file_exists(WEBROOT . 'includes/auth.php')) {
+            $config = include WEBROOT . 'includes/auth.php';
+            foreach ($config as $key => $value) {
+                $this->setConfig($key, $value);
+            }
+        }
     }
 
     /**
-     * @param array $kga
+     * Set one config value.
+     * By default it uses instance properties.
+     *
+     * @param $key
+     * @param $value
      */
-    public function setKga(array $kga)
+    protected function setConfig($key, $value)
+    {
+        if (!isset($this->$key) || $key == 'kga' || $key == 'database') {
+            return;
+        }
+        $this->$key = $value;
+    }
+
+    /**
+     * @param Kimai_Config $kga
+     */
+    public function setKga($kga)
     {
         $this->kga = $kga;
     }
 
     /**
-     * @return array
+     * @return Kimai_Config
      */
     protected function getKga()
     {

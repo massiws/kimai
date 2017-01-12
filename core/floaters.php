@@ -59,25 +59,30 @@ switch ($axAction) {
         if (isset($kga['customer'])) {
             die();
         }
-
+        
+        $allSkins = glob(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'skins' . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
         $skins = array();
-        $langs = array();
-
-        $allSkins = glob(__DIR__ . "/../skins/*", GLOB_ONLYDIR);
         foreach ($allSkins as $skin) {
             $name = basename($skin);
             $skins[$name] = $name;
         }
 
-        foreach (Kimai_Translations::langs() as $lang) {
-            $langs[$lang] = $lang;
+        $languages = array();
+        foreach (Kimai_Translation_Service::getAvailableLanguages() as $lang) {
+            $languages[$lang] = $lang;
         }
 
         $view->assign('skins', $skins);
-        $view->assign('langs', $langs);
+        $view->assign('langs', $languages);
         $view->assign('timezones', timezoneList());
         $view->assign('user', $kga['user']);
         $view->assign('rate', $database->get_rate($kga['user']['userID'], null, null));
+
+        $defaults = array(
+            'table_time_format' => $kga->getTableTimeFormat()
+        );
+        $prefs = $database->user_get_preferences_by_prefix('ui.');
+        $view->assign('prefs', array_merge($defaults, $prefs));
 
         echo $view->render("floaters/preferences.php");
     break;
@@ -88,7 +93,7 @@ switch ($axAction) {
     case 'add_edit_customer':
         $oldGroups = array();
         if ($id) {
-                  $oldGroups = $database->customer_get_groupIDs($id);
+            $oldGroups = $database->customer_get_groupIDs($id);
         }
 
         if (!checkGroupedObjectPermission('Customer', $id ? 'edit' : 'add', $oldGroups, $oldGroups)) {
@@ -110,6 +115,7 @@ switch ($axAction) {
                 $view->assign('street', $data['street']);
                 $view->assign('zipcode', $data['zipcode']);
                 $view->assign('city', $data['city']);
+                $view->assign('country', $data['country']);
                 $view->assign('phone', $data['phone']);
                 $view->assign('fax', $data['fax']);
                 $view->assign('mobile', $data['mobile']);
@@ -139,6 +145,11 @@ switch ($axAction) {
             }
             $view->assign('id', 0);
         }
+
+        $countries = Zend_Locale::getTranslationList('Territory', $kga['language'], 2);
+        asort($countries);
+        
+        $view->assign('countries', $countries);
 
         echo $view->render("floaters/add_edit_customer.php");
     break;
@@ -242,9 +253,11 @@ switch ($axAction) {
                 $view->assign('selectedProjectIds', $selectedProjectIds);
 
                 $selectedProjects = $database->activity_get_projects($id);
-                foreach ($selectedProjects as &$selectedProject) {
-                    // edit by reference!
-                    $selectedProject['fixedRate'] = $database->get_fixed_rate($selectedProject['projectID'], $id);
+                if (is_array($selectedProjects)) {
+                    foreach ($selectedProjects as &$selectedProject) {
+                        // edit by reference!
+                        $selectedProject['fixedRate'] = $database->get_fixed_rate($selectedProject['projectID'], $id);
+                    }
                 }
                 $view->assign('selectedProjects', $selectedProjects);
                 $view->assign('id', $id);
