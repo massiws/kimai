@@ -65,17 +65,49 @@
                     </li>
                 </ul>
             </fieldset>
-            <fieldset id="commenttab">
-                <ul>
-                    <li>
-                        <label for="comment"><?php echo $this->kga['lang']['comment'] ?>:</label>
-                        <?php echo $this->formTextarea('comment', $this->comment, array(
-                            'cols' => 30,
-                            'rows' => 5,
-                            'class' => 'comment'
-                        )); ?>
-                    </li>
-                </ul>
+            <fieldset id="projectstab">
+                <table class="projectsTable">
+                    <tr>
+                        <td><label style="text-align: left;"><?php echo $this->translate('projects') ?>:</label></td>
+                        <td><label style="text-align: left;"><?php echo $this->translate('fixedRate') ?>:</label></td>
+                        <td></td>
+                    </tr>
+                    <?php
+                    $assignedProjects = array();
+                    if (isset($this->selectedProjects) && is_array($this->selectedProjects)) {
+                        foreach ($this->selectedProjects as $selectedProject) {
+                            $assignedProjects[] = $selectedProject['projectID'];
+                            $name = $this->ellipsis($this->escape($selectedProject['name']), 30) . ' (' . $this->ellipsis($this->escape($selectedProject['customer_name']), 30) . ')';
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $name . $this->formHidden('assignedProjects[]', $selectedProject['projectID']); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->formText('fixedRates[]', $selectedProject['fixedRate']); ?>
+                                </td>
+                                <td>
+                                    <a class="deleteButton">
+                                        <img src="../skins/<?php echo $this->escape($this->kga['conf']['skin']) ?>/grfx/close.png" width="22" height="16"/>
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+
+                    $selectArray = array(-1 => '');
+                    foreach ($this->allProjects as $project) {
+                        if (array_search($project['projectID'], $assignedProjects) === false) {
+                            $selectArray[$project['projectID']] = $this->ellipsis($project['name'], 30) . ' (' . $this->ellipsis($project['customerName'], 30) . ')';
+                        }
+                    }
+                    ?>
+                    <tr class="addRow" <?php if (count($selectArray) <= 1): ?> style="display:none" <?php endif; ?> >
+                        <td colspan="5"><?php
+                            echo $this->formSelect('newProject', null, null, $selectArray); ?> </td>
+                    </tr>
+                </table>
             </fieldset>
             <fieldset id="groups">
                 <ul>
@@ -90,29 +122,29 @@
                     </li>
                 </ul>
             </fieldset>
-            <fieldset id="projectstab">
+            <fieldset id="commenttab">
                 <ul>
                     <li>
-                        <label for="activityProjects"><?php echo $this->kga['lang']['projects'] ?>:</label>
-                        <?php echo $this->formSelect('projects[]', $this->selectedProjects, array(
-                            'class' => 'formfield',
-                            'id' => 'activityProjects',
-                            'multiple' => 'multiple',
-                            'size' => 5,
-                            'style' => 'width:255px'), $this->projects); ?>
+                        <label for="comment"><?php echo $this->kga['lang']['comment'] ?>:</label>
+                        <?php echo $this->formTextarea('comment', $this->comment, array(
+                            'cols' => 30,
+                            'rows' => 5,
+                            'class' => 'comment'
+                        )); ?>
                     </li>
                 </ul>
             </fieldset>
         </div>
         <div id="formbuttons">
-            <input class='btn_norm' type='button' value='<?php echo $this->kga['lang']['cancel'] ?>' onclick='floaterClose();return false;'/>
-            <input class='btn_ok' type='submit' value='<?php echo $this->kga['lang']['submit'] ?>'/>
+            <input class="btn_norm" type="button" value="<?php echo $this->kga['lang']['cancel'] ?>" onclick="floaterClose();return false;"/>
+            <input class="btn_ok" type="submit" value="<?php echo $this->kga['lang']['submit'] ?>"/>
         </div>
     </form>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#floater_innerwrap').tabs({selected: 0});
+        
         var $add_edit_activity = $('#add_edit_activity');
         $add_edit_activity.ajaxForm({
             'beforeSubmit': function () {
@@ -120,8 +152,7 @@
 
                 if ($add_edit_activity.attr('submitting')) {
                     return false;
-                }
-                else {
+                } else {
                     $add_edit_activity.attr('submitting', true);
                     return true;
                 }
@@ -138,6 +169,45 @@
             },
             'error': function () {
                 $add_edit_activity.removeAttr('submitting');
+            }
+        });
+        
+        var $projectstab = $('#projectstab');
+        var $addRow = $projectstab.find('.addRow');
+
+        function deleteButtonClicked() {
+            var row = $(this).parent().parent()[0];
+            var id = $('#assignedProjects', row).val();
+            var text = $('td', row).text().trim();
+            $('#newProject').append('<option label = "' + text + '" value = "' + id + '">' + text + '</option>');
+            $(row).remove();
+
+            if ($('#newProject option').length > 1) {
+                $addRow.show();
+            }
+        }
+
+        $projectstab.find('.deleteButton').click(deleteButtonClicked);
+
+        $('#newProject').change(function () {
+            if ($(this).val() == -1) {
+                return;
+            }
+
+            var row = $('<tr>' +
+                '<td>' + $('option:selected', this).text() + '<input type="hidden" name="assignedProjects[]" value="' + $(this).val() + '"/></td>' +
+                '<td><input type="text" name="fixedRates[]"/></td>' +
+                '<td><a class="deleteButton"><img src="../skins/' + skin + '/grfx/close.png" width="22" height="16" /></a></td>' +
+                '</tr>');
+            $addRow.before(row);
+            $('.deleteButton', row).click(deleteButtonClicked);
+
+            $('option:selected', this).remove();
+
+            $(this).val(-1);
+
+            if ($('option', this).length <= 1) {
+                $addRow.hide();
             }
         });
     });

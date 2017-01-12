@@ -94,7 +94,7 @@ return array(
     "passwordReset" => array(
         "button" => "Reset password",
         "notSupported" => "The current authentication plugin doesn't support resetting the password.",
-        "instructions" => "Enter your username and an email will containing a link will be sent to the associated email address. There will be no indication if your username is correct so make sure to enter it correctly!",
+        "instructions" => "Enter your username and an email containing a link will be sent to the associated email address. There will be no indication if your username is correct so make sure to enter it correctly!",
         "mailSubject" => "Kimai - Password reset",
         "mailMessage" => "This is an automatically generated mail to reset your password at Kimai. Please open the following address in your browser:\n%{URL}",
         "mailConfirmation" => "An email has been sent to the associated email address. Please follow the instructions provided in that email. If no email address is associated with this username you won't receive an email and need to contact your administrator.",
@@ -121,6 +121,7 @@ return array(
     "street" => "Street",
     "zipcode" => "Zipcode",
     "city" => "City",
+    "country" => "Country",
     "telephon" => "Phone",
     "fax" => "Fax",
     "mobilephone" => "Cell",
@@ -208,7 +209,7 @@ return array(
     "ctype1" => "Notice",
     "ctype2" => "Caution!",
     "hint" => "Hint:",
-    "rename_caution_before_username" => "If you change the user-name of",
+    "rename_caution_before_username" => "If you change the username of",
     "rename_caution_after_username" => "you have to re-login under your new username immediately!",
     "timediff_warn" => "You must enter different times into the time in-/out fields!",
     "visibility" => "Visibility",
@@ -263,7 +264,6 @@ return array(
     "atLeastOneGroup" => 'At least one group has to be selected.',
     "noFading" => "no fading effect",
     "user_list_hidden" => "hide user list by default",
-    'show_sensible_data' => 'Display sensible data as well in the debug extension.',
     'show_update_warn' => 'Turn off warning before an update.',
     'check_at_startup' => 'Show a message on the login page if a newer version is available.',
     'show_daySeperatorLines' => 'Draw a line between entries of different days.',
@@ -298,7 +298,7 @@ return array(
     'editLimitError' => 'The end date is further in the past than it was allowed to be.',
     'hideClearedEntries' => 'hide cleared entries',
     'showCommentsByDefault' => 'show comments by default',
-    'showTrackingNumber' => 'show tracking number and description details in timesheet',
+    'showTrackingNumber' => 'show tracking number in timesheet',
     'hideOverlapLines' => 'Don\'t indicate time overlap of entries',
     'defaultLocation' => 'Default location',
     'showQuickNote'	=> 'show quick note button',
@@ -339,6 +339,7 @@ EOD
     'errorMessages' => array(
         'permissionDenied' => 'Permission denied',
         'userWithSameName' => 'A customer name can not be the same as a user name.',
+        'userExistsAlready' => 'User exists already.',
         'customerWithSameName' => 'A user name can not be the same as a customer name.',
         'sameGlobalRoleName' => 'A global role with this name already exists.',
         'sameMembershipRoleName' => 'A membership role with this name already exists.',
@@ -511,6 +512,11 @@ Choose another table prefix or delete existing tables with this prefix in order 
         'current' => "You are running the latest version :)"
     ),
 
-    "log_delete" => "log cleared",
+    'debug' => array(
+        'lines' => '(limited to %s lines)',
+        'logfile' => 'LOGFILE',
+        'clear' => 'Clear logfile',
+        'log_delete' => 'log cleared',
+    ),
 
 );

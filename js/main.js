@@ -325,11 +325,11 @@ function updateTimeframeWarning() {
 //
 function startRecord(projectID,activityID,userID) {
     var now = Math.floor(((new Date()).getTime()) / 1000);
-    offset = 0;
     startsec = now;
+    offset = 0;
     show_stopwatch();
     value = projectID +"|"+ activityID;
-    $.post("processor.php", { axAction: "startRecord", axValue: value, id: userID, startTime: now},
+    $.post("processor.php", { axAction: "startRecord", axValue: value, id: userID},
         function(response){
             var data = jQuery.parseJSON(response);
             currentRecording = data['id'];
@@ -368,7 +368,7 @@ function updateRecordStatus(record_ID, record_startTime, customerID, customerNam
     return;
   }
   
-  startsec = record_startTime;
+  startsec = record_startTime + offset;
   
   if (selected_project != projectID)
     buzzer_preselect_project(projectID, projectName, customerID, customerName, false);
@@ -467,10 +467,12 @@ function buzzer_preselect_update_ui(selector,selectedID,updateRecording) {
 // ... so just THX! ;)
 
 function ticktac() {
+    // startsec is an absolute timestamp adjusted to local time on page load.
+    // total seconds = "getTime" local time - "startsec" from server adjusted to local time
+    var total_seconds = Math.floor((new Date()).getTime() / 1000) - startsec;
+
     // Split total seconds from start time to current time into
     // separate variables for viewing hours:minutes:seconds
-    var startsecoffset = startsec ? startsec : offset;
-    var total_seconds = Math.floor((new Date()).getTime() / 1000) - startsecoffset;
     var hours   = Math.floor(total_seconds / 3600);
     var minutes = Math.floor((total_seconds - hours * 3600) / 60);
     var seconds = Math.floor(total_seconds - hours * 3600 - minutes * 60);
@@ -511,7 +513,7 @@ function ticktack_off() {
 // shows dialogue for editing an item in either customer, project or activity list
 //
 function editSubject(subject, id) {
-    var width = 490;
+    var width = 800;
     if (subject == 'project') {
         width = 800;
     }

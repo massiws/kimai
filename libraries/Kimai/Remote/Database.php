@@ -51,17 +51,15 @@ class Kimai_Remote_Database
      */
     public function __construct($kga, $database)
     {
-        $oldDatabase = $database;
-
-        $this->tablePrefix = $database->getTablePrefix();
         $this->kga = $kga;
-        $this->dbLayer = $oldDatabase;
+        $this->dbLayer = $database;
+        $this->tablePrefix = $this->dbLayer->getTablePrefix();
         $this->conn = $this->dbLayer->getConnectionHandler();
     }
 
     /**
-     * @param $fnName
-     * @param $arguments
+     * @param string $fnName
+     * @param array $arguments
      * @return mixed
      */
     public function __call($fnName, $arguments)
@@ -125,11 +123,19 @@ class Kimai_Remote_Database
 
     /**
      * returns expenses for specific user as multidimensional array
+     *
      * @TODO: needs comments
-     * @param integer $users ID of user in table users
      * @param integer $start
      * @param integer $end
+     * @param integer $users ID of user in table users
+     * @param null $customers
+     * @param null $projects
+     * @param bool $reverse_order
+     * @param int $filter_refundable
      * @param integer $filterCleared
+     * @param int $startRows
+     * @param int $limitRows
+     * @param bool $countOnly
      * @return array
      * @author th
      * @author Alexander Bauer
@@ -139,8 +145,12 @@ class Kimai_Remote_Database
         $conn = $this->conn;
         $kga = $this->kga;
 
+        // -1 for disabled, 0 for only not cleared entries
         if (!is_numeric($filterCleared)) {
-            $filterCleared = $kga['conf']['hideClearedEntries'] - 1; // 0 gets -1 for disabled, 1 gets 0 for only not cleared entries
+            $filterCleared = -1;
+            if ($kga->getSettings()->isHideClearedEntries()) {
+                $filterCleared = 0;
+            }
         }
 
         $start = MySQL::SQLValue($start, MySQL::SQLVALUE_NUMBER);

@@ -3,15 +3,15 @@
 <table>
 <thead>
 	<tr class="headerrow">
-		<th><?php echo $this->kga['lang']['options']?></th>
-		<?php if ($this->kga['conf']['flip_project_display']): ?>
-		<th><?php echo $this->kga['lang']['customer']?></th>
-		<th><?php echo $this->kga['lang']['project']?></th>
+		<th width="80px"><?php echo $this->kga['lang']['options']?></th>
+		<?php if ($this->kga->getSettings()->isFlipProjectDisplay()): ?>
+			<th width="25%"><?php echo $this->kga['lang']['customer']?></th>
+			<th><?php echo $this->kga['lang']['project']?></th>
 		<?php else: ?>
-		<th><?php echo $this->kga['lang']['project']?></th>
-		<th><?php echo $this->kga['lang']['customer']?></th>
+			<th width="25%"><?php echo $this->kga['lang']['project']?></th>
+			<th><?php echo $this->kga['lang']['customer']?></th>
 		<?php endif; ?>
-		<th><?php echo $this->kga['lang']['groups']?></th>
+		<th width="25%"><?php echo $this->kga['lang']['groups']?></th>
 	</tr>
 </thead>
 <tbody>
@@ -40,9 +40,9 @@
 						src="<?php echo $this->skin('grfx/button_trashcan.png'); ?>" title="<?php echo $this->kga['lang']['delete_project']?>"
 						width="13" height="13" alt="<?php echo $this->kga['lang']['delete_project']?>" border="0"></a>
 				</td>
-				<?php if ($this->kga['conf']['flip_project_display']): ?>
+				<?php if ($this->kga->getSettings()->isFlipProjectDisplay()): ?>
 					<td class="customer <?php if ($isHidden) { echo 'hidden'; } ?>">
-						<?php echo $this->escape($this->truncate($row['customerName'], 30, '...'))?>
+						<?php echo $this->escape($this->ellipsis($row['customerName'], 30))?>
 					</td>
 					<td class="projects <?php if ($isHidden) { echo 'hidden'; } ?>">
 						<?php echo $this->escape($row['name']) ?>
@@ -52,7 +52,7 @@
 						<?php echo $this->escape($row['name']) ?>
 					</td>
 					<td class="customer <?php if ($isHidden) { echo 'hidden'; } ?>">
-						<?php echo $this->escape($this->truncate($row['customerName'], 30, '...'))?>
+						<?php echo $this->escape($this->ellipsis($row['customerName'], 30))?>
 					</td>
 				<?php endif; ?>
 				<td class="<?php if ($isHidden) { echo 'hidden'; } ?>">
