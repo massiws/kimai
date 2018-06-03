@@ -1,6 +1,9 @@
+[![Latest Stable Version](https://poser.pugx.org/kimai/kimai/v/stable)](https://packagist.org/packages/kimai/kimai)
+[![Total Downloads](https://poser.pugx.org/kimai/kimai/downloads)](https://packagist.org/packages/kimai/kimai)
 [![Build status](https://travis-ci.org/kimai/kimai.svg?branch=master)](https://travis-ci.org/kimai/kimai "Current build status")
  [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/kimai/kimai.svg)](http://isitmaintained.com/project/kimai/kimai "Average time to resolve an issue")
  [![Percentage of issues still open](http://isitmaintained.com/badge/open/kimai/kimai.svg)](http://isitmaintained.com/project/kimai/kimai "Percentage of issues still open")
+ [![Join the chat at https://gitter.im/kimai/kimai](https://badges.gitter.im/kimai/kimai.svg)](https://gitter.im/kimai/kimai)
 
 Kimai Time Tracking
 ===================
@@ -12,39 +15,43 @@ that runs on (almost) every webserver with PHP and MySQL.
 
 You can get more information about this time-tracking software:
 
-* at our [website](http://www.kimai.org)
-* at our [forum](http://forum.kimai.org)
-* in the [documentation](http://www.kimai.org/documentation/)
+* at our [website](https://www.kimai.org)
+* in the [documentation](https://www.kimai.org/documentation/)
 
 ## Features
 
-This is just a short feature list, play around with the [demo installation](http://www.kimai.org/demo/) to see all features:
- 
+This is just a short feature list, play around with the [demo installation](https://www.kimai.org/demo/) to see all features:
+
 * Multi-user management
+* Customer login with read only privileges
 * Every user has its own timesheet
 * Extensive and role-based permission management
 * Manage customers, projects and activities
 * Track project budgets
 * Record expenses
 * Print invoices in multiple formats (ODT, ODS, HTML)
-* Export data in multiple formats (PDF, XLS, CSV, direct print)
+* Export data in multiple formats (PDF, XLSX, CSV, direct print)
 * SOAP and JSON API
-* Native apps ... see our [Apps page](http://www.kimai.org/apps/)
+* LDAP login provider
+* Native apps ... see our [Apps page](https://www.kimai.org/apps/)
 
-![Screenshot](http://www.kimai.org/assets/kimai08.jpg)
+## Missing features
 
-Getting Started
----------------
+* Different rates for different working hours. Rates can only be set for users, projects and activities
+* Budgets based on time
+* No workflow ([approval process](https://github.com/kimai/kimai/issues/470))
+
+![Screenshot](https://www.kimai.org/assets/kimai08.jpg)
+
+## Getting Started
 
 Kimai requires a webserver with PHP and a database (MySQL recommended).
-Accessing the backend through a supported browser.
 
-Please see the [INSTALL.md](INSTALL.md) in this folder in order to set up Kimai
-on your webserver.
+Please see the [online documentation](https://www.kimai.org/documentation/installation/) in order to set up Kimai on your webserver.
 
 ## Contributing
 
-We would love to get input from all developer out there.
+We would love to get input from all developers out there.
 Please read our [contribution guidelines](https://github.com/kimai/kimai/blob/master/.github/CONTRIBUTING.md) to find out how.
 
 ## Support / Donate
