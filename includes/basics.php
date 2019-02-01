@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of
- * Kimai - Open Source Time Tracking // http://www.kimai.org
+ * Kimai - Open Source Time Tracking // https://www.kimai.org
  * (c) Kimai-Development-Team since 2006
  *
  * Kimai is free software; you can redistribute it and/or modify
@@ -26,13 +26,17 @@
 defined('WEBROOT') || define('WEBROOT', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../'));
 
+if (!file_exists(WEBROOT . 'libraries/autoload.php')) {
+    die('Please run <code>composer install --no-dev</code> on the command line to install all php dependencies.');
+}
+
 set_include_path(
     implode(
         PATH_SEPARATOR,
-        array(
+        [
             '.',
             realpath(APPLICATION_PATH . 'libraries/'),
-        )
+        ]
     )
 );
 
@@ -49,7 +53,7 @@ require_once WEBROOT . 'includes/func.php';
 // The $kga (formerly Kimai Global Array) is initialized here
 // It was replaced by an proxy object, but until refactored it is still used as array in a lot of places
 require_once WEBROOT . 'includes/autoconf.php';
-$kga = new Kimai_Config(array(
+$kga = new Kimai_Config([
     'server_prefix' => $server_prefix,
     'server_hostname' => $server_hostname,
     'server_database' => $server_database,
@@ -58,10 +62,10 @@ $kga = new Kimai_Config(array(
     'server_charset' => $server_charset,
     'defaultTimezone' => $defaultTimezone,
     'password_salt' => isset($password_salt) ? $password_salt : ''
-));
+]);
 
 // will inject the version variables into the Kimai_Config object
-include WEBROOT . 'includes/version.php';
+require WEBROOT . 'includes/version.php';
 
 // write vars from autoconf.php into kga
 if (isset($language)) {
@@ -84,7 +88,7 @@ Kimai_Registry::setConfig($kga);
 // ============ global namespace cleanup ============
 // remove some variables from the global namespace, that should either be
 // not accessible or which are available through the kga config object
-$cleanup = array(
+$cleanup = [
     'server_prefix',
     'server_hostname',
     'server_database',
@@ -97,7 +101,7 @@ $cleanup = array(
     'defaultTimezone',
     'billable',
     'skin'
-);
+];
 
 foreach ($cleanup as $varName) {
     if (isset($$varName)) {
@@ -142,8 +146,8 @@ if (!file_exists($tmpDir) || !is_dir($tmpDir) || !is_writable($tmpDir)) {
     die('Kimai needs write permissions for: temporary/');
 }
 
-$frontendOptions = array('lifetime' => 7200, 'automatic_serialization' => true);
-$backendOptions = array('cache_dir' => $tmpDir);
+$frontendOptions = ['lifetime' => 7200, 'automatic_serialization' => true];
+$backendOptions = ['cache_dir' => $tmpDir];
 $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
 Kimai_Registry::setCache($cache);
 Zend_Locale::setCache($cache);

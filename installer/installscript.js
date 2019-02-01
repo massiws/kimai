@@ -1,6 +1,6 @@
 /**
  * This file is part of
- * Kimai - Open Source Time Tracking // http://www.kimai.org
+ * Kimai - Open Source Time Tracking // https://www.kimai.org
  * (c) 2006-2009 Kimai-Development-Team
  *
  * Kimai is free software; you can redistribute it and/or modify
@@ -72,7 +72,7 @@ function lang_selected(lang) {
 	language = lang;
 	$('#installsteps').slideUp(500, function() {
 		target = '20_gpl';
-		
+
 		$.post('steps/20_gpl.php', {
 			lang: lang
 		}, function(data) {
@@ -97,7 +97,7 @@ function gpl_proceed() {
 	step_ahead();
 	$('#installsteps').slideUp(500, function() {
 		target = "25_system_requirements";
-		
+
 		$.post('steps/25_system_requirements.php', {
 			lang: language
 		}, function(data) {
@@ -111,7 +111,7 @@ function gpl_proceed() {
 // Check system requirements
 
 function check_system_requirements() {
-	$.post("processor.php", { 
+	$.post("processor.php", {
 		axAction: 'checkRequirements'
 	}, function(data) {
 		eval(data);
@@ -124,19 +124,21 @@ function resetRequirementsIndicators() {
 	$('div.sp_iconv').removeClass("fail");
 	$('div.sp_memory').removeClass("fail");
 	$('div.sp_dom').removeClass("fail");
+	$('div.sp_zip').removeClass("fail");
 
 	$('div.sp_phpversion').addClass("ok");
 	$('div.sp_mysql').addClass("ok");
 	$('div.sp_iconv').addClass("ok");
 	$('div.sp_memory').addClass("ok");
 	$('div.sp_dom').addClass("ok");
+	$('div.sp_zip').addClass("ok");
 }
 
 function system_requirements_proceed() {
 	step_ahead();
 	$('#installsteps').slideUp(500, function() {
 		target = "28_timezone";
-		
+
 		$.post("steps/28_timezone.php", {
 			lang: language
 		}, function(data) {
@@ -154,7 +156,7 @@ function timezone_proceed() {
 	timezone = $('#timezone').val();
 	$('#installsteps').slideUp(500, function() {
 		target = "40_permissions";
-		
+
 		$.post('steps/40_permissions.php', {
 			lang: language
 		}, function(data) {
@@ -192,7 +194,7 @@ function cp_proceed() {
 	step_ahead();
 	$('#installsteps').slideUp(500, function(){
 		target = "50_enter_access_data";
-		
+
 		$.post("steps/50_enter_access_data.php", {
 			lang: language
 		}, function(data) {
@@ -212,7 +214,7 @@ function host_proceed() {
 
 	if (username == '') {
 		var caution = '';
-		
+
 		if (language == "de") {
 			caution = "Sie müssen einen Benutzernamen eingeben!";
 		} else if (language == "bg") {
@@ -226,11 +228,11 @@ function host_proceed() {
 		step_ahead();
 		$('#installsteps').slideUp(500, function(){
 			target = "60_db_select_mysql";
-			
+
 			$.post('steps/60_db_select_mysql.php', {
-				hostname: hostname, 
-				username: username, 
-				password: password, 
+				hostname: hostname,
+				username: username,
+				password: password,
 				lang: language
 			}, function(data) {
 				$('#installsteps').html(data);
@@ -337,7 +339,7 @@ function create_db() {
 			write_config();
 		} else {
 			target = "db_error";
-			
+
 			$.post('steps/db_error.php', {
 				lang: language
 			}, function(data) {

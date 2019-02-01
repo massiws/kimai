@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of
- * Kimai - Open Source Time Tracking // http://www.kimai.org
+ * Kimai - Open Source Time Tracking // https://www.kimai.org
  * (c) Kimai-Development-Team - since 2006
  *
  * Kimai is free software; you can redistribute it and/or modify
@@ -32,8 +32,8 @@ class Kimai_Translation_Service
      */
     public static function getAvailableLanguages()
     {
-        $languages = array();
-        foreach (glob(WEBROOT . '/language/*.php') as $langFile) {
+        $languages = [];
+        foreach (glob(WEBROOT . 'language/*.php') as $langFile) {
             $languages[] = str_replace(".php", "", basename($langFile));
         }
         sort($languages);

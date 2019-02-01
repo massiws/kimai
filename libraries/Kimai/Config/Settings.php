@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of
- * Kimai - Open Source Time Tracking // http://www.kimai.org
+ * Kimai - Open Source Time Tracking // https://www.kimai.org
  * (c) Kimai-Development-Team since 2006
  *
  * Kimai is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ class Kimai_Config_Settings extends Kimai_ArrayObject
      *
      * @param array $settings
      */
-    public function __construct(array $settings = array())
+    public function __construct(array $settings = [])
     {
         $data = array_merge(
             $this->getDefaults(),
@@ -47,7 +47,7 @@ class Kimai_Config_Settings extends Kimai_ArrayObject
      */
     protected function getDefaults()
     {
-        return array(
+        return [
             'rowlimit' => 100,
             'skin' => Kimai_Config::getDefault(Kimai_Config::DEFAULT_SKIN),
             'autoselection' => 1,
@@ -65,8 +65,10 @@ class Kimai_Config_Settings extends Kimai_ArrayObject
             'showCommentsByDefault' => 0,
             'hideOverlapLines' => 0,
             'showTrackingNumber' => 0,
+            'showBillability' => 0,
             'sublistAnnotations' => 0,
-        );
+            'inlineEditingOfDescriptions' => 0,
+        ];
     }
 
     /**
@@ -152,6 +154,17 @@ class Kimai_Config_Settings extends Kimai_ArrayObject
     }
 
     /**
+     * Whether the user sees the billability in his timesheet.
+     * Can be configured by the user himself.
+     *
+     * @return bool
+     */
+    public function isShowBillability()
+    {
+        return $this->get('showBillability', 0) == 1;
+    }
+
+    /**
      * @return int
      */
     public function getSublistAnnotationType()
@@ -205,6 +218,14 @@ class Kimai_Config_Settings extends Kimai_ArrayObject
     public function isShowQuickNote()
     {
         return (bool)$this->get('showQuickNote', false);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInlineEditingOfDescriptionsSet()
+    {
+        return $this->get('inlineEditingOfDescriptions', 0) == 1;
     }
 
     /**
